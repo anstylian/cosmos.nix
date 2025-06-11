@@ -189,6 +189,9 @@
     andromeda-src.url = "github:andromedaprotocol/andromedad/andromeda-1";
     andromeda-src.flake = false;
 
+    axelar-src.url = "github:axelarnetwork/axelar-core/v1.2.1";
+    axelar-src.flake = false;
+
     injective-src.url = "github:OpenDeFiFoundation/injective-core/v1.13.1";
     injective-src.flake = false;
 
@@ -258,6 +261,9 @@
 
     wasmvm_2_0_0-src.url = "github:CosmWasm/wasmvm/v2.0.0";
     wasmvm_2_0_0-src.flake = false;
+
+    wasmvm_1_5_8-src.url = "github:CosmWasm/wasmvm/v1.5.8";
+    wasmvm_1_5_8-src.flake = false;
 
     wasmvm_1_5_5-src.url = "github:CosmWasm/wasmvm/v1.5.5";
     wasmvm_1_5_5-src.flake = false;

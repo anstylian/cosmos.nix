@@ -32,6 +32,23 @@
         "type": "github"
       }
     },
+    "axelar-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1738949831,
+        "narHash": "sha256-NFYP9KP6lLHv876ZEkwjM7MTBBqvdbOqBcn9/LhLp1I=",
+        "owner": "axelarnetwork",
+        "repo": "axelar-core",
+        "rev": "cbf773678d2dc26820f30cd260e8ffc704879e4d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "axelarnetwork",
+        "ref": "v1.2.1",
+        "repo": "axelar-core",
+        "type": "github"
+      }
+    },
     "celestia-app-src": {
       "flake": false,
       "locked": {
@@ -1426,6 +1443,7 @@
       "inputs": {
         "akash-src": "akash-src",
         "andromeda-src": "andromeda-src",
+        "axelar-src": "axelar-src",
         "celestia-app-src": "celestia-app-src",
         "celestia-node-src": "celestia-node-src",
         "cometbft-src": "cometbft-src",
@@ -1511,6 +1529,7 @@
         "wasmvm_1_5_2-src": "wasmvm_1_5_2-src",
         "wasmvm_1_5_4-src": "wasmvm_1_5_4-src",
         "wasmvm_1_5_5-src": "wasmvm_1_5_5-src",
+        "wasmvm_1_5_8-src": "wasmvm_1_5_8-src",
         "wasmvm_1_beta7-src": "wasmvm_1_beta7-src",
         "wasmvm_2_0_0-src": "wasmvm_2_0_0-src",
         "wasmvm_2_0_3-src": "wasmvm_2_0_3-src",
@@ -1936,6 +1955,23 @@
       "original": {
         "owner": "CosmWasm",
         "ref": "v1.5.5",
+        "repo": "wasmvm",
+        "type": "github"
+      }
+    },
+    "wasmvm_1_5_8-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1738662808,
+        "narHash": "sha256-T49+FiKahSoaiPKnz7g+8iY2o39H2pdwNG6bh657H7w=",
+        "owner": "CosmWasm",
+        "repo": "wasmvm",
+        "rev": "ff551e2db1f0b721c887ca05fdd6b5c77dc17cff",
+        "type": "github"
+      },
+      "original": {
+        "owner": "CosmWasm",
+        "ref": "v1.5.8",
         "repo": "wasmvm",
         "type": "github"
       }

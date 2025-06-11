@@ -113,6 +113,12 @@
           inherit (self'.packages) libwasmvm_1_3_0;
           inherit cosmosLib;
         };
+        axelar = import ../packages/axelar.nix {
+          inherit (inputs) axelar-src;
+          inherit (self'.packages) libwasmvm_1_5_8;
+          inherit cosmosLib;
+          inherit (pkgs) libiconv;
+        };
         osmosis = import ../packages/osmosis.nix {
           inherit (inputs) osmosis-src;
           inherit (self'.packages) libwasmvm_2_2_4;

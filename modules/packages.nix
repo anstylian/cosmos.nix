@@ -6,8 +6,21 @@
     self',
     system,
     ...
-  }: {
-    packages = with inputs.nixpkgs.lib;
+  }: let
+    lib = inputs.nixpkgs.lib;
+    ensureMeta = path: drv:
+      if (drv.meta or null) != null
+      then drv
+      else
+        drv.overrideAttrs (old: {
+          meta =
+            (old.meta or {})
+            // {
+              description = "cosmos.nix package ${lib.concatStringsSep "." path}";
+              platforms = [system];
+            };
+        });
+    packageSet = with lib;
       lists.foldl recursiveUpdate
       # This is the base attrset where we put individual packages, sometimes it
       # makes sense to group like packages together (i.e. all the different gaia versions)
@@ -43,10 +56,7 @@
           inherit (pkgs) buildGoModule;
           inherit (inputs) cometbft-src;
         };
-        cosmwasm-check = import ../packages/cosmwasm-check.nix {
-          inherit pkgs;
-          inherit (inputs) cosmwasm-src;
-        };
+        cosmwasm-check = pkgs.callPackage ../packages/cosmwasm-check.nix {};
         cosmovisor = import ../packages/cosmovisor.nix {
           inherit (pkgs) buildGoModule;
           inherit (inputs) cosmos-sdk-src;
@@ -245,5 +255,14 @@
         ## Darwin only packages
         ++ (lists.optionals pkgs.stdenv.isDarwin
           []));
+  in {
+    packages =
+      lib.mapAttrsRecursiveCond
+      (value: !(lib.isDerivation value))
+      (path: value:
+        if lib.isDerivation value
+        then ensureMeta path value
+        else value)
+      packageSet;
   };
 }

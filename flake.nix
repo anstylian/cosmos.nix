@@ -6,12 +6,12 @@
 
   description = "A reproducible package set for Cosmos, IBC and CosmWasm";
 
-  outputs = inputs @ {flake-parts, ...}:
-    flake-parts.lib.mkFlake {inherit inputs;} {
+  outputs = inputs @ {flake-parts, ...}: let
+    lib = inputs.nixpkgs.lib;
+    flake = flake-parts.lib.mkFlake {inherit inputs;} {
       systems = [
         "aarch64-darwin"
         "aarch64-linux"
-        "x86_64-darwin"
         "x86_64-linux"
       ];
       imports = [
@@ -27,13 +27,20 @@
         ./modules/packages.nix
         # Sets the checks flake output
         ./modules/checks.nix
-        # Sets the apps flake output
-        ./modules/apps.nix
         # Sets the overlays.default flake output
         ./modules/overlay.nix
         # Sets the flake.nixosModules flake output
         ./modules/nixosModules.nix
       ];
+    };
+  in
+    flake
+    // {
+      apps = lib.mapAttrs (system: packages:
+        import ./modules/apps.nix {
+          inherit inputs system packages;
+        })
+      flake.packages;
     };
 
   inputs = {
@@ -326,7 +333,7 @@
     provenance-src.url = "github:/provenance-io/provenance/v1.19.1";
     provenance-src.flake = false;
 
-    namada-src.url = "github:anoma/namada/v0.28.1";
+    namada-src.url = "github:namada-net/namada/v201.0.8";
     namada-src.flake = false;
 
     dydx-src.url = "github:dydxprotocol/v4-chain/protocol/v3.0.0-dev0";

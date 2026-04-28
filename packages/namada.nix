@@ -2,10 +2,13 @@
   pkgs,
   namada-src,
 }: let
-  rust = pkgs.rust-bin.stable."1.76.0".default.overrideAttrs (old: {
-    targetPlatforms = ["x86_64-linux"];
-    badTargetPlatforms = [];
-  });
+  rust =
+    (pkgs.rust-bin.stable."1.85.1".default.override {
+      targets = ["wasm32-unknown-unknown"];
+    }).overrideAttrs (old: {
+      targetPlatforms = ["x86_64-linux" "wasm32-unknown-unknown"];
+      badTargetPlatforms = [];
+    });
   rustPlatform = pkgs.makeRustPlatform {
     cargo = rust;
     rustc = rust;
@@ -13,8 +16,9 @@
 in
   rustPlatform.buildRustPackage {
     pname = "namada";
-    version = "v0.28.1";
+    version = "v201.0.8";
     src = namada-src;
+    RUSTUP_TOOLCHAIN = "1.85.1";
     nativeBuildInputs = with pkgs;
       (
         if stdenv.isLinux
@@ -38,21 +42,31 @@ in
         hidapi
       ];
 
-    cargoLock = {
-      lockFile = "${namada-src}/Cargo.lock";
-      outputHashes = {
-        "borsh-ext-1.2.0" = "sha256-nQadqyeAY0/gEMLBkpqtSm5D7kV+r3LVT/Cg2oTV7Ug=";
-        "clru-0.5.0" = "sha256-/1NfKqcWGCyF3+f0v2CnuFmNjjKkzfvYcX+GzxLwz7s=";
-        "ethbridge-bridge-contract-0.24.0" = "sha256-qs81bIWKk4oxh6nFWqAt4eBbPuIWF2a3ytUSjDJZWSU=";
-        "index-set-0.8.0" = "sha256-oxJfQdKnYiW5VbMPuukVyDY5n8mys31hYNrJF89nXhY=";
-        "ledger-namada-rs-0.0.1" = "sha256-qFL8LU7i5NAnMUhtrGykVfiYX1NodCNkZG07twyVrac=";
-        "masp_note_encryption-1.0.0" = "sha256-NwiosHTdzzny+L5VtOBaIa7wia/yRlfiz/8f0pAHUZk=";
-        "sparse-merkle-tree-0.3.1-pre" = "sha256-B1ZEN4FZjV0x0Cqvx7AZjH9qhDMZYFPVJzg89dqWCv4=";
-        "tiny-bip39-0.8.2" = "sha256-TU+7Vug3+M6Zxhy6Wln54Pxc9ES4EdFq5TvMOcAG+qA=";
-        "tower-abci-0.11.1" = "sha256-KisZtsylvUymvV1TpDdGIiE7fSarcuD3I8oZ33BdKTU=";
-        "wasmer-2.3.0" = "sha256-Fd8ewAwslopjqUVoeHwSR/Zoh4Zm+Sdx8oksXmhLU20=";
-        "zcash_encoding-0.2.0" = "sha256-keuaoM/t1Q/+8JMemMMUuIo4g5I/EAoONFge+dyWGy0=";
-      };
-    };
+    cargoLock.lockFile = "${namada-src}/Cargo.lock";
+
+    postPatch = ''
+      ${pkgs.python3}/bin/python3 <<'PY'
+      from pathlib import Path
+
+      rocksdb_root = Path("/build/cargo-vendor-dir/librocksdb-sys-0.17.1+9.9.3/rocksdb")
+      headers = list(rocksdb_root.rglob("*.h"))
+
+      for header in headers:
+          text = header.read_text()
+          if "#include <cstdint>\n" in text or "#include <stdint.h>\n" in text:
+              continue
+          if "uint32_t" not in text and "uint64_t" not in text:
+              continue
+
+          lines = text.splitlines(keepends=True)
+          insert_at = 0
+          for idx, line in enumerate(lines):
+              if line.startswith("#include "):
+                  insert_at = idx + 1
+          lines.insert(insert_at, "#include <cstdint>\n")
+          header.write_text("".join(lines))
+      PY
+    '';
+
     doCheck = false;
   }

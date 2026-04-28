@@ -6,7 +6,7 @@
 cosmosLib.mkCosmosGoApp {
   # nixpkgs latest go version v1.22 is v1.22.5 but Neutron v4.2.2 requires
   # v1.22.6 or more so v1.23 is used instead
-  goVersion = "1.23";
+  goVersion = "1.25";
   name = "neutron";
   version = "v4.2.2";
   src = neutron-src;

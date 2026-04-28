@@ -11,7 +11,7 @@ mkCosmosGoApp {
   rev = slinky-src.rev;
   vendorHash = "sha256-vYSLryccpfY0QPqjGsplgJBkWnSbsCJN8wlycW27E1I=";
   tags = ["netgo"];
-  goVersion = "1.23";
+  goVersion = "1.25";
   engine = "cometbft/cometbft";
 
   doCheck = false;

@@ -6,8 +6,8 @@
 }:
 cosmosLib.mkCosmosGoApp {
   name = "osmosis";
-  version = "v30.0.1";
-  goVersion = "1.23";
+  version = "v31.0.2";
+  goVersion = "1.25";
   src = osmosis-src;
   rev = "697b89f2790dbedba88c1a28396571701ced17ad"; # Revision for v30.0.1
   vendorHash = "sha256-jXfYYZUjm7QU6rCy/zQPUkb3BfgZ1/VA/gUL+n8Cb20=";

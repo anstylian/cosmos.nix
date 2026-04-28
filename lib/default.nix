@@ -84,15 +84,78 @@ nix-std: {
     additionalLdFlags ? [],
     appName ? null,
     preCheck ? null,
-    goVersion ? "1.23",
+    goVersion ? "1.25",
     ...
   }: let
     buildGoModuleArgs =
       pkgs.lib.filterAttrs
       (n: _:
         builtins.all (a: a != n)
-        ["src" "name" "version" "vendorHash" "appName"])
+        ["src" "name" "version" "vendorHash" "appName" "preBuild"])
       args;
+
+    # bytedance/sonic v1.x has no GoMapIterator definition for Go 1.25+ (Swiss maps became
+    # the default in 1.24 and the experiment tag was dropped in 1.25). Inject the missing
+    # stub for vendorHash builds (patches vendor/) and proxyVendor builds (downloads modules
+    # into $GOPATH/pkg/mod/ first, then patches).
+    sonicMapGo125 = pkgs.writeText "map_go125.go" ''
+      //go:build go1.25
+      // +build go1.25
+
+      package rt
+
+      import "unsafe"
+
+      type GoMapIterator struct {
+        K  unsafe.Pointer
+        V  unsafe.Pointer
+        T  *GoMapType
+        It unsafe.Pointer
+      }
+    '';
+    sonicGo125Patch = ''
+            _patch_sonic_rt() {
+              local dir="$1"
+              [ -d "$dir" ] || return 0
+              [ -e "$dir/map_go125.go" ] && return 0
+              if grep -q "type GoMapIterator" "$dir/fastvalue.go" 2>/dev/null; then
+                return 0
+              fi
+              chmod -R u+w "$(dirname "$dir")"
+              cp ${sonicMapGo125} "$dir/map_go125.go"
+            }
+            if [ -d vendor ]; then
+              # vendorHash: vendor dir is present and writable after configurePhase
+              for _d in vendor/github.com/bytedance/sonic*/internal/rt; do
+                _patch_sonic_rt "$_d"
+              done
+            else
+              # proxyVendor: ask Go for the extracted module directory, then patch
+              # the real cache entry in place. This avoids -overlay restrictions and
+              # avoids breaking workspace projects by forcing vendoring.
+              _sonic_ver=$(grep "^github.com/bytedance/sonic v[0-9]" go.sum 2>/dev/null \
+                | grep -v "/go.mod" | head -1 | awk '{print $2}' || true)
+              if [ -n "$_sonic_ver" ]; then
+                _sonic_dir=$(
+                  GOWORK=off go mod download -json "github.com/bytedance/sonic@''${_sonic_ver}" 2>/dev/null \
+                    | ${pkgs.python3}/bin/python3 -c '
+      import json
+      import sys
+
+      try:
+          data = json.load(sys.stdin)
+      except Exception:
+          data = {}
+
+      print(data.get("Dir", ""))
+      '
+                )
+                if [ -n "$_sonic_dir" ]; then
+                  _patch_sonic_rt "$_sonic_dir/internal/rt"
+                fi
+              fi
+            fi
+    '';
 
     dependency-version = with nix-std.lib; let
       all-dep-matches =
@@ -123,7 +186,8 @@ nix-std: {
       else appName;
 
     buildGoModuleVersion = {
-      "1.23" = pkgs.buildGo123Module;
+      "1.25" = pkgs.buildGo125Module;
+      "1.26" = pkgs.buildGo126Module;
     };
 
     buildGoModule = buildGoModuleVersion.${goVersion};
@@ -131,6 +195,7 @@ nix-std: {
     buildGoModule ({
         inherit version vendorHash src;
         pname = name;
+        preBuild = sonicGo125Patch + (args.preBuild or "");
         preCheck =
           if preCheck == null
           then ''export HOME="$(mktemp -d)"''

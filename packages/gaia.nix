@@ -169,7 +169,7 @@
         name = "gaia";
         vendorHash = "sha256-5XRQj6zR1VsJRe3VrjzI6INvm1Obz9JgmCQTQpCZyf0=";
         version = "v17.2.0";
-        goVersion = "1.23";
+        goVersion = "1.25";
         src = gaia17-src;
         rev = gaia17-src.rev;
         tags = ["netgo"];
@@ -184,7 +184,7 @@
         name = "gaia";
         vendorHash = "sha256-+vTP15mftPKWMkE4yI3avI+jQt917YCYGdUt29E1lYs=";
         version = "v18.1.0";
-        goVersion = "1.23";
+        goVersion = "1.25";
         src = gaia18-src;
         rev = gaia18-src.rev;
         tags = ["netgo"];
@@ -206,7 +206,7 @@
         version = "v19.1.0";
         # nixpkgs latest go version v1.22 is v1.22.5 but Gaia v19.1.0 requires
         # v1.22.6 or more so v1.23 is used instead
-        goVersion = "1.23";
+        goVersion = "1.25";
         src = gaia19-src;
         rev = gaia19-src.rev;
         tags = ["netgo"];
@@ -230,7 +230,7 @@
         version = "v20.0.0";
         # nixpkgs latest go version v1.22 is v1.22.5 but Gaia v20.0.0 requires
         # v1.22.6 or more so v1.23 is used instead
-        goVersion = "1.23";
+        goVersion = "1.25";
         src = gaia20-src;
         rev = gaia20-src.rev;
         tags = ["netgo"];
@@ -254,7 +254,7 @@
         version = "v23.3.0";
         # nixpkgs latest go version v1.22 is v1.22.5 but Gaia v20.0.0 requires
         # v1.22.6 or more so v1.23 is used instead
-        goVersion = "1.23";
+        goVersion = "1.25";
         src = gaia23-src;
         rev = gaia23-src.rev;
         tags = ["netgo"];

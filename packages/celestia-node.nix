@@ -7,7 +7,7 @@ mkCosmosGoApp {
   version = "v0.16.0";
   src = celestia-node-src;
   rev = celestia-node-src.rev;
-  goVersion = "1.23";
+  goVersion = "1.25";
   vendorHash = "sha256-8IDjVQZrOfg4tR//mQxKVoJjaTYJdSuENS5IrAZDdN0=";
   engine = "tendermint/tendermint";
   doCheck = false;

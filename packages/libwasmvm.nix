@@ -5,9 +5,11 @@
 }: let
   libwasmvmCommon = {
     pname = "libwasmvm";
+    # Pin to 1.83.0: __rust_probestack was removed from compiler_builtins in
+    # Rust >= 1.84, but wasmer-vm references it as a function pointer, causing
+    # an undefined symbol at runtime when loading the .so.
     nativeBuildInputs = with pkgs; [
-      rustc
-      cargo
+      rust-bin.stable."1.83.0".default
       deterministic-uname
     ];
     postInstall = ''
@@ -23,6 +25,14 @@
 in
   builtins.mapAttrs (_: libwasmvm: pkgs.rustPlatform.buildRustPackage (libwasmvmCommon // libwasmvm))
   {
+    libwasmvm_3_0_4 = {
+      src = "${inputs.wasmvm_3_0_4-src}/libwasmvm";
+      version = "v3.0.4";
+      cargoLock = {
+        lockFile = "${inputs.wasmvm_3_0_4-src}/libwasmvm/Cargo.lock";
+      };
+    };
+
     libwasmvm_2_2_4 = {
       src = "${inputs.wasmvm_2_2_4-src}/libwasmvm";
       version = "v2.2.4";

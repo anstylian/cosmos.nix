@@ -18,7 +18,7 @@ in
     goVersion = "1.25";
     src = axelar-src;
     rev = axelar-src.rev;
-    vendorHash = "sha256-Ue302wb5r+98zlIsiuhJe+MwEWPunj5wwvzdL6+zEhE=";
+    vendorHash = "sha256-62/2xmMqKHp1PO07wAOr0yQffezXCTKQnG2QVdD87jg=";
     tags = ["ledger" "wasmd"];
     engine = "tendermint/tendermint";
     trimpath = true;

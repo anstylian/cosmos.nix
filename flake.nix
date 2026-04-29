@@ -88,6 +88,9 @@
     gaia-main-src.url = "github:cosmos/gaia";
     gaia-main-src.flake = false;
 
+    gaia27-2-src.url = "github:cosmos/gaia/v27.2.0";
+    gaia27-2-src.flake = false;
+
     gaia23-src.url = "github:cosmos/gaia/v23.3.0";
     gaia23-src.flake = false;
 
@@ -244,6 +247,9 @@
 
     wasmvm_1-src.url = "github:CosmWasm/wasmvm/v1.0.0";
     wasmvm_1-src.flake = false;
+
+    wasmvm_3_0_4-src.url = "github:CosmWasm/wasmvm/v3.0.4";
+    wasmvm_3_0_4-src.flake = false;
 
     wasmvm_2_2_4-src.url = "github:CosmWasm/wasmvm/v2.2.4";
     wasmvm_2_2_4-src.flake = false;

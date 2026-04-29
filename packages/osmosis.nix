@@ -1,7 +1,7 @@
 {
   cosmosLib,
   osmosis-src,
-  libwasmvm_2_2_4,
+  libwasmvm_3_0_4,
   libiconv,
 }:
 cosmosLib.mkCosmosGoApp {
@@ -15,11 +15,14 @@ cosmosLib.mkCosmosGoApp {
   excludedPackages = ["cl-genesis-positions"];
   engine = "cometbft/cometbft";
   preFixup = ''
-    ${cosmosLib.wasmdPreFixupPhase libwasmvm_2_2_4 "osmosisd"}
-    ${cosmosLib.wasmdPreFixupPhase libwasmvm_2_2_4 "chain"}
-    ${cosmosLib.wasmdPreFixupPhase libwasmvm_2_2_4 "node"}
+    ${cosmosLib.wasmdPreFixupPhase libwasmvm_3_0_4 "osmosisd"}
+    ${cosmosLib.wasmdPreFixupPhase libwasmvm_3_0_4 "chain"}
+    ${cosmosLib.wasmdPreFixupPhase libwasmvm_3_0_4 "node"}
   '';
-  buildInputs = [libwasmvm_2_2_4 libiconv];
+  buildInputs = [
+    libwasmvm_3_0_4
+    libiconv
+  ];
   proxyVendor = true;
 
   # Test has to be skipped as end-to-end testing requires network access

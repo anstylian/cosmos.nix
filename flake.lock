@@ -549,6 +549,23 @@
         "type": "github"
       }
     },
+    "gaia27-2-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1775485236,
+        "narHash": "sha256-A1id3E/ZPCeQ90d4j1LO4OMWUH4EMhrW3GNkE6dlveU=",
+        "owner": "cosmos",
+        "repo": "gaia",
+        "rev": "b3654bc875e8732ac6a2ecbe9417db139b5b90b1",
+        "type": "github"
+      },
+      "original": {
+        "owner": "cosmos",
+        "ref": "v27.2.0",
+        "repo": "gaia",
+        "type": "github"
+      }
+    },
     "gaia5-src": {
       "flake": false,
       "locked": {
@@ -1468,6 +1485,7 @@
         "gaia19-src": "gaia19-src",
         "gaia20-src": "gaia20-src",
         "gaia23-src": "gaia23-src",
+        "gaia27-2-src": "gaia27-2-src",
         "gaia5-src": "gaia5-src",
         "gaia6-ordered-src": "gaia6-ordered-src",
         "gaia6-src": "gaia6-src",
@@ -1539,7 +1557,8 @@
         "wasmvm_2_1_3-src": "wasmvm_2_1_3-src",
         "wasmvm_2_1_4-src": "wasmvm_2_1_4-src",
         "wasmvm_2_2_3-src": "wasmvm_2_2_3-src",
-        "wasmvm_2_2_4-src": "wasmvm_2_2_4-src"
+        "wasmvm_2_2_4-src": "wasmvm_2_2_4-src",
+        "wasmvm_3_0_4-src": "wasmvm_3_0_4-src"
       }
     },
     "rust-overlay": {
@@ -2125,6 +2144,23 @@
       "original": {
         "owner": "CosmWasm",
         "ref": "v2.2.4",
+        "repo": "wasmvm",
+        "type": "github"
+      }
+    },
+    "wasmvm_3_0_4-src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1777052990,
+        "narHash": "sha256-MCXxrqnTgen4JxXn+6WKtbGTuQ8lKT4btmix8pfHFWA=",
+        "owner": "CosmWasm",
+        "repo": "wasmvm",
+        "rev": "bc888b4ebf6a760907cf70ddee4c6b708dcdb249",
+        "type": "github"
+      },
+      "original": {
+        "owner": "CosmWasm",
+        "ref": "v3.0.4",
         "repo": "wasmvm",
         "type": "github"
       }

@@ -271,6 +271,30 @@
 
         excludedPackages = ["tests/interchain"];
       };
+
+      gaia27 = {
+        name = "gaia";
+        vendorHash = "sha256-/m6voRFSt2nMVUEYl2kya4flxvQ3txi7eMI3eeFlDyg=";
+        version = "v27.2.0";
+        # nixpkgs latest go version v1.22 is v1.22.5 but Gaia v20.0.0 requires
+        # v1.22.6 or more so v1.23 is used instead
+        goVersion = "1.25";
+        src = gaia27-2-src;
+        rev = gaia27-2-src.rev;
+        tags = ["netgo"];
+        engine = "cometbft/cometbft";
+        proxyVendor = true;
+
+        preFixup = ''
+          ${cosmosLib.wasmdPreFixupPhase libwasmvm_2_2_3 "gaiad"}
+        '';
+        buildInputs = [libwasmvm_2_2_3];
+
+        # Tests have to be disabled because they require Docker to run
+        doCheck = false;
+
+        excludedPackages = ["tests/interchain"];
+      };
     };
 in
   gaias // {gaia-main = gaias.gaia8;}

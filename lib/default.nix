@@ -117,7 +117,13 @@ nix-std: {
             _patch_sonic_rt() {
               local dir="$1"
               [ -d "$dir" ] || return 0
+              # map_go125.go already present: nothing to do.
               [ -e "$dir/map_go125.go" ] && return 0
+              # sonic v1.14.2+: map_swiss_go124.go uses "go1.24 && !go1.26", which
+              # already covers go1.25. Adding our stub would cause GoMapIterator to
+              # be declared twice. Skip.
+              [ -e "$dir/map_swiss_go124.go" ] && return 0
+              # Newer sonic inlined GoMapIterator into fastvalue.go; skip those too.
               if grep -q "type GoMapIterator" "$dir/fastvalue.go" 2>/dev/null; then
                 return 0
               fi
